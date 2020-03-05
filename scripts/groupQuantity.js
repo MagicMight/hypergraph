@@ -1,18 +1,24 @@
-const groupQuantity = (G) => {
+const groupQuantity2 = G => {
     let groups = G.map( group => group.map( el => { delete el.s2; return el} ));
     let onDeleteEdge = [];
+
+    console.time('Оценивание по группам');
     for(let g=1; g<groups.length; g++) {
 
         for(let a=0; a<groups[g-1].length; a++ ) {
             let isThisEdgeWasUpdated = false;
+
             for(let b=0; b<groups[g].length; b++ ) {
                 if( !IsOverlaps( groups[g-1][a], groups[g][b] ) ) {
+
                     if( g-1 === 0 ) {
                         isThisEdgeWasUpdated = true;
                         groups[g-1][a].s2 = groups[g-1][a].s2 === undefined ? 1 : groups[g-1][a].s2 + 1;
                         groups[g][b].s2 = groups[g][b].s2 === undefined ? 1 : groups[g][b].s2 + 1;
                     }
+
                     else {
+
                         if(  groups[g-1][a].s2 === undefined ) {
                             onDeleteEdge.push( groups[g-1][a] );
                             continue;
@@ -32,6 +38,9 @@ const groupQuantity = (G) => {
         }
 
     }
+    console.timeEnd('Оценивание по группам');
+
+    console.time('Логарифмическая оценка');
     for(let g=0; g<groups.length; g++) {
         groups[g] = groups[g]
             .filter( edge => (edge.s2 && edge.needDelete === undefined) ? true : false )
@@ -45,8 +54,24 @@ const groupQuantity = (G) => {
         // groups[g] = groups[g].map( edge => { edge.s3 = Math.log(edge.s2) * (edge.os**2) * Math.sqrt(edge.lin); return edge }); //!!
         // groups[g] = groups[g].map( edge => { edge.s3 = edge.s2 * edge.os; return edge });
     }
+    console.timeEnd('Логарифмическая оценка');
     grouppedEdges = groups;
     s2Group = groups;
     // console.log(onDeleteEdge);
 }
 
+const groupQuantity = G => {
+    let groups = G.map( group => group.map( el => {el.s2 = 1; return el} ));
+    console.time('Логарифмическая оценка');
+    for(let g=0; g<groups.length; g++) {
+        groups[g] = groups[g]
+            .map( edge => { 
+                edge.s3 = Math.log(edge.os) * Math.log(edge.lin)**2; 
+                return edge; 
+            }); //!!
+    }
+    console.timeEnd('Логарифмическая оценка');
+    grouppedEdges = groups;
+    s2Group = groups;
+
+}

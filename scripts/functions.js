@@ -18,7 +18,7 @@ const givepart = ( groups, N ) => {
     let redges = [];
     let res2   = groups.map( 
         group => {
-            return group.filter( (edge,index) => {
+            return group.filter( (edge, index) => {
                 if( index < N ) return true;
             });
         }

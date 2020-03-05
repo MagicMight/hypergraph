@@ -9,7 +9,7 @@ let grouppedEdges,
 
 
 const _init = ( hypergraph ) => {
-    console.time('Время оценивания');
+    console.time('Общее время оценивания');
     mainHg = hypergraph;
     mainHg['resultSize'] = Math.min(...mainHg.vertex);
 
@@ -26,7 +26,7 @@ const _init = ( hypergraph ) => {
     deleteHardOverlapseEdges( mainHg.edges );
 
     grouppedEdges       = groupEdges( mainHg.edges );
-    groupQuantity( grouppedEdges);
+    groupQuantity( grouppedEdges );
 
     sortEdgeGroup( 'Overlaps' );
     sortEdgeGroup( 'linear' );    
@@ -34,10 +34,10 @@ const _init = ( hypergraph ) => {
     sortEdgeGroup( 's2' );
     sortEdgeGroup( 's3' );
 
+    console.timeEnd('Общее время оценивания');
     console.log( 'Сгруппированные ребра', grouppedEdges );
-    console.timeEnd('Время оценивания');
 
-    getAnswerFull(givepart(s2Group, 50), 10);
+    getAnswerFull(givepart(s2Group, 20), 10);
     // getAnswerFull( s2Group, 10);
 }
 
